@@ -1,0 +1,77 @@
+name: Build & push (develop)
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'      # semver-like tags (glob, no regex)
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Image tag to publish (e.g., v1.2.3 or test-123). If empty, uses the pushed tag or falls back to short SHA.'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+# Avoid parallel builds for the same ref
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Derive image tags/labels
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            # latest if the push is to develop
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/develop' }}
+            # always short sha
+            type=sha,format=short
+            # if the event is a tag, use semver (remove the 'v' if it exists)
+            type=semver,pattern={{version}},enable=${{ startsWith(github.ref, 'refs/tags/') }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          # BuildKit cache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          # SLSA provenance & SBOM (if supported by your Buildx builder)
+          provenance: true
+          sbom: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
