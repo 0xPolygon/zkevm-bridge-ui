@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { routerStateParser } from "src/adapters/browser";
 import { getPolicyCheck, setPolicyCheck } from "src/adapters/storage";
-import { ReactComponent as PolygonZkEVMLogo } from "src/assets/polygon-zkevm-logo.svg";
+import { ReactComponent as PolygonZkEVMLogo } from "src/assets/agglayer_logo.svg";
 import { useEnvContext } from "src/contexts/env.context";
 import { useProvidersContext } from "src/contexts/providers.context";
 import { EthereumChainId, PolicyCheck, WalletName } from "src/domain";
@@ -101,7 +101,7 @@ export const Login: FC = () => {
           onClose={() => setShowPolicyModal(false)}
           onConfirm={onConnectProvider}
           showCancelButton={false}
-          title={`Welcome to the Polygon zkEVM ${deploymentName || ""}`}
+          title={`Welcome to the Polygon CDK Bridge ${deploymentName || ""}`}
         />
       )}
     </div>
