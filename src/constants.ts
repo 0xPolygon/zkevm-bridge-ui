@@ -1,8 +1,8 @@
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
 import { ethers } from "ethers";
 
+import { ReactComponent as PolygonZkEVMChainIcon } from "src/assets/icons/chains/agglayer_logo.svg";
 import { ReactComponent as EthChainIcon } from "src/assets/icons/chains/ethereum.svg";
-import { ReactComponent as PolygonZkEVMChainIcon } from "src/assets/icons/chains/polygon-zkevm.svg";
 import { Chain, Currency, EthereumChain, ProviderError, Token, ZkEVMChain } from "src/domain";
 import { ProofOfEfficiency__factory } from "src/types/contracts/proof-of-efficiency";
 import { getEthereumNetworkName } from "src/utils/labels";

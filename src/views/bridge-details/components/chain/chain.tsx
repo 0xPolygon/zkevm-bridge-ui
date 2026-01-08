@@ -1,7 +1,7 @@
 import { FC } from "react";
 
+import { ReactComponent as PolygonZkEVMChainIcon } from "src/assets/icons/chains/agglayer_logo.svg";
 import { ReactComponent as EthChainIcon } from "src/assets/icons/chains/ethereum.svg";
-import { ReactComponent as PolygonZkEVMChainIcon } from "src/assets/icons/chains/polygon-zkevm.svg";
 import * as domain from "src/domain";
 import { useChainStyles } from "src/views/bridge-details/components/chain/chain.styles";
 import { Typography } from "src/views/shared/typography/typography.view";

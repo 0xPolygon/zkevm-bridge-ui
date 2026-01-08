@@ -1,7 +1,7 @@
-# zkEVM Bridge UI
+# Polygon CDK Bridge UI
 
-The zkEVM Bridge UI provides a simple user interface to bridge ETH and your favorite ERC-20 tokens
-from Ethereum to the Polygon zkEVM and back.
+The CDK Bridge UI provides a simple user interface to bridge ETH and your favorite ERC-20 tokens
+from Ethereum to a Polygon CDK network and back.
 
 ## Development
 
@@ -55,7 +55,7 @@ npm run dev
 A [GitHub action](.github/workflows/push-docker-develop.yml) is already configured to automatically
 generate and push images to DockerHub on updates to the **develop** and **main** branches.
 
-To locally generate a Docker image of the zkEVM Bridge UI, you can just run the following command:
+To locally generate a Docker image of the CDK Bridge UI, you can just run the following command:
 
 ```sh
 docker build . -t zkevm-bridge-ui:local
