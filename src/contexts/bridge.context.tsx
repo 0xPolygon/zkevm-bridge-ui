@@ -727,10 +727,16 @@ const BridgeProvider: FC<PropsWithChildren> = (props) => {
               })
           : BigNumber.from(300000);
 
-      const { gasPrice, maxFeePerGas } = await from.provider.getFeeData();
+      const { gasPrice, maxFeePerGas, maxPriorityFeePerGas } = await from.provider.getFeeData();
 
-      if (maxFeePerGas) {
-        return { data: { gasLimit, maxFeePerGas }, type: "eip-1559" };
+      if (maxFeePerGas && maxPriorityFeePerGas) {
+        const adjustedMaxFeePerGas = maxFeePerGas.lt(maxPriorityFeePerGas)
+          ? maxPriorityFeePerGas.mul(2)
+          : maxFeePerGas;
+        return {
+          data: { gasLimit, maxFeePerGas: adjustedMaxFeePerGas, maxPriorityFeePerGas },
+          type: "eip-1559",
+        };
       } else {
         const legacyGasPrice = gasPrice || (await from.provider.getGasPrice());
         const gasPriceIncrease = legacyGasPrice
